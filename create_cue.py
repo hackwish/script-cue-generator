@@ -153,8 +153,8 @@ def select_release(releases):
 
 def select_disc(release):
     mediums = release.get("medium-list", [])
-    if not mediums:
-        # If mediums are not loaded, fetch the release in detail
+    if not mediums or not any(m.get("track-list") for m in mediums):
+        # If mediums are not loaded or track list is missing, fetch the release in detail
         try:
             res = musicbrainzngs.get_release_by_id(release["id"], includes=["recordings", "artists"])
             release = res.get("release", {})
